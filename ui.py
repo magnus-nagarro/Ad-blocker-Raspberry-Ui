@@ -1,6 +1,9 @@
 import customtkinter
 from PIL import Image
 import psutil
+import requests
+import json
+from tkinter import ttk
 
 # --> Setting gernal aspects of custom Tkinter:
 
@@ -9,6 +12,9 @@ customtkinter.set_appearance_mode("dark")
 
 #set default color theme
 customtkinter.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
+
+# Deactivate automatic scaling
+customtkinter.deactivate_automatic_dpi_awareness()
 
 
 
@@ -68,8 +74,95 @@ def settings_button_action():
     about_frame.place_forget()
     settings_frame.place(x=150,y=0)
 
+# "Start" Button Action:
+def start_button_action():
+    url= "http://localhost/start"
+    
+    try:
+        response = requests.post(url)
+    
+        if response.status_code == 200:
+            buffer = json.loads(response.text)
+            status_label.configure(text=f"Running: {buffer["running"]}", fg_color="green")
+    except:
+        status_label.configure(text=f"Unable to reach Server", fg_color="#990000")
 
+def stop_button_action():
+    url= "http://localhost/stop"
+    
+    try:
+        response = requests.post(url)
 
+        if response.status_code == 200:
+            buffer = json.loads(response.text)
+            status_label.configure(text=f"Running: {buffer["running"]}", fg_color="red")
+    except:
+        status_label.configure(text=f"Unable to reach Server", fg_color="#990000")
+
+# Import Links to the Database:
+def import_button_action():
+    link= link_entry.get()
+    url= f"http://localhost/add?link={link}"
+    
+    try:
+        response = requests.post(url)
+        buffer = json.loads(response.text)
+        print(buffer)
+        
+        if buffer['success'] == True:
+            import_status_label.configure(text="Link imported successfully", fg_color="green")
+        elif buffer["success"] == False:
+            import_status_label.configure(text=f"Error during importing: {buffer["error"]}", fg_color="red")
+
+        getlinks()
+ 
+    except:
+        import_status_label.configure(text="Error during importing", fg_color="red")
+        getlinks()
+
+# Get all links from Database:
+def getlinks():
+    url = "http://localhost/blocked"
+
+    response = requests.get(url)
+    data = json.loads(response.text)
+    id=1
+    for element in data:
+        # Abrufen der Werte der spezifischen Spalte in der Tabelle und Umwandlung in Strings
+        table_values = [str(table.item(row)['values'][1]) for row in table.get_children()]  # Ändern Sie den Index entsprechend Ihrer Tabelle
+        # Überprüfen, ob das Element (als String) bereits in den Werten der Tabelle vorhanden ist
+        if not str(element) in table_values:
+            table.insert(parent='',index='end',text='', values=(id,element))
+            id = id +1
+    
+def on_select(event):
+    selected_item = table.selection()[0]
+    values = table.item(selected_item, 'values')
+    print(values)
+
+def change_window_scaling(choice):
+    scale = int(choice)
+    scale = scale /100
+    customtkinter.set_window_scaling(scale)
+    customtkinter.set_widget_scaling(scale)
+    table.column_stretch = 1.25
+    table.row_stretch = 1.25
+
+def remove_rows():
+    print("remove")
+
+def search(value_to_find):
+    for i, row in enumerate(table.get_children()):
+        row_value = table.item(row)["values"][1]  # Ändern Sie den Index basierend auf der Spalte, in der Sie suchen möchten
+        if row_value == value_to_find:
+            table.selection_set(row)
+            table.yview(i)  # Scrollen Sie zur Zeile
+            return
+
+def search_button_action():
+    value = search_entry.get()
+    search(value)
+        
 
 # --> Initalizing the Main Elements
 
@@ -93,8 +186,8 @@ about_frame = customtkinter.CTkFrame(master=app, width=450, height=600, fg_color
 settings_frame = customtkinter.CTkFrame(master=app, width=450, height=600, fg_color="transparent")
 
 # Initalizing Progressbar:
-progressbar = customtkinter.CTkProgressBar(master=app, width=440, height=30, orientation="horizontal", corner_radius=5, progress_color="green")
-progressbar.place(x=155,y=565)
+status_label = customtkinter.CTkLabel(master=app, width=440, height=30, text="", corner_radius=5, fg_color="blue")
+status_label.place(x=155,y=565)
 
 
 
@@ -125,7 +218,14 @@ settings_image = customtkinter.CTkImage(light_image=Image.open("icons8-einstellu
 # "About" button Image:
 about_image = customtkinter.CTkImage(light_image=Image.open("icons8-info-50.png"), dark_image=Image.open("icons8-info-50.png"),size=(20,20))
 
+# "Sync" button Image:
+sync_image = customtkinter.CTkImage(light_image=Image.open("icons8-synchronisieren-48.png"), dark_image=Image.open("icons8-synchronisieren-48.png"),size=(20,20))
 
+# "Remove" button Image:
+remove_image = customtkinter.CTkImage(light_image=Image.open("icons8-entfernen-24.png"), dark_image=Image.open("icons8-entfernen-24.png"),size=(20,20))
+
+# "Remove" button Image:
+search_image = customtkinter.CTkImage(light_image=Image.open("icons8-suche-50.png"), dark_image=Image.open("icons8-suche-50.png"),size=(20,20))
 
 # --> Initalizing Elements of the Menu-bar:
 
@@ -134,11 +234,11 @@ label = customtkinter.CTkLabel(menu, width=140,text="AD Blocker - Menu",fg_color
 label.place(x=5,y=150)
 
 # "Start" button:
-button_start = customtkinter.CTkButton(menu, width=140, text="Start", command = home_button_action, image=start_image, fg_color="green")
+button_start = customtkinter.CTkButton(menu, width=140, text="Start", command = start_button_action, image=start_image, fg_color="green")
 button_start.place(x=5, y= 200)
 
 # "Stop" button:
-button_stop = customtkinter.CTkButton(menu, width=140, text="Stop", command = home_button_action, image=stop_image, fg_color="red")
+button_stop = customtkinter.CTkButton(menu, width=140, text="Stop", command = stop_button_action, image=stop_image, fg_color="red")
 button_stop.place(x=5, y= 235)
 
 # "CPU" label:
@@ -179,13 +279,62 @@ tabview.add("Statistics")  # add tab at the end
 tabview.add("Import/Export")  # add tab at the end
 tabview.set("Statistics")  # set currently visible tab
 
+tabview1 = customtkinter.CTkTabview(main_frame,width=440, height = 300, border_color=("#1F538D"), border_width=1, anchor="nw")
+tabview1.place(x=5,y=250)
+tabview1.add("blocked Links")
 
+
+# --> Initalizing Elements of Tabview
+
+link_entry = customtkinter.CTkEntry(tabview.tab("Import/Export"), placeholder_text="Please enter a Link", width= 350)
+link_entry.place(x=10,y=10)
+
+import_button = customtkinter.CTkButton(tabview.tab("Import/Export"), width= 50, text="Add", command = import_button_action)
+import_button.place(x=365,y=10)
+
+import_status_label = customtkinter.CTkLabel(tabview.tab("Import/Export"), width = 405, fg_color="transparent", corner_radius=5, text = "")
+import_status_label.place(x=10, y=45)
+
+# --> Initalizing Elements of Tabview 1:
+table = ttk.Treeview(tabview1.tab("blocked Links"), height = 9)
+table['columns'] = ('link_id', 'link_name')
+
+table.column("#0", width=0, stretch="no")
+table.column("link_id",anchor="center", width=20)
+table.column("link_name",anchor="center",width=395)
+
+table.heading("#0",text="",anchor="center")
+table.heading("link_id",text="Id",anchor="center")
+table.heading("link_name",text="Link",anchor="center")
+
+table.bind("<ButtonRelease-1>", on_select)
+
+table.place(x=5,y=35)
+
+# create scrollbar for Table
+table_scrollbar = customtkinter.CTkScrollbar(tabview1.tab("blocked Links"), command=table.yview)
+table_scrollbar.pack(side='right', fill='y')
+
+table.configure(yscrollcommand= table_scrollbar.set)
+
+sync_button = customtkinter.CTkButton(tabview1.tab("blocked Links"), width= 50, text="Sync", command = getlinks, image=sync_image)
+sync_button.place(x=5,y=0)
+
+remove_button = customtkinter.CTkButton(tabview1.tab("blocked Links"), width= 150, text="Remove selected Rows", command = remove_rows, image = remove_image, fg_color="red")
+remove_button.place(x=85,y=0)
+
+search_entry = customtkinter.CTkEntry(tabview1.tab("blocked Links"), placeholder_text="Search", width= 100)
+search_entry.place(x=268,y=0)
+
+search_button = customtkinter.CTkButton(tabview1.tab("blocked Links"), width= 15, text="", command = search_button_action, image = search_image)
+search_button.place(x=375,y=0)
 
 # --> Initalizing Elements of About:
 
 #h1
 about_h1 = customtkinter.CTkLabel(about_frame, text="About", width=440, fg_color="transparent",font=("",40))
 about_h1.place(x=5,y=10)
+
 
 
 # --> Initalizing Elements of Settings:
@@ -202,5 +351,14 @@ theme_text.place(x=5,y=70)
 theme_optionmenu = customtkinter.CTkOptionMenu(settings_frame, values=["Dark", "Light", "Auto (System default)"], command=theme_change)
 theme_optionmenu.place(x=155,y=70)
 
+#Window-sclaing text:
+window_scaling_text = customtkinter.CTkLabel(settings_frame, text="Scaling:", width=140, fg_color="transparent",font=("",20))
+window_scaling_text.place(x=5,y=105)
+
+#Windwos-scaling Drop-Down:
+window_scaling_optionmenu = customtkinter.CTkOptionMenu(settings_frame, values=["100","125","150","175","200","225","250"], command=change_window_scaling)
+window_scaling_optionmenu.place(x=155,y=105)
+
+getlinks()
 update_resources()
 app.mainloop()
