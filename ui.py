@@ -4,6 +4,9 @@ import psutil
 import requests
 import json
 from tkinter import ttk
+import time
+import threading
+import os
 
 # --> Setting gernal aspects of custom Tkinter:
 
@@ -101,6 +104,7 @@ def stop_button_action():
 
 # Import Links to the Database:
 def import_button_action():
+    background_thread = threading.Thread(target=reset)
     link= link_entry.get()
     url= f"http://localhost/add?link={link}"
     
@@ -113,13 +117,15 @@ def import_button_action():
             import_status_label.configure(text="Link imported successfully", fg_color="green")
         elif buffer["success"] == False:
             import_status_label.configure(text=f"Error during importing: {buffer["error"]}", fg_color="red")
-
+        import_status_label.place(x=10, y=45)
         getlinks()
  
     except:
         import_status_label.configure(text="Error during importing", fg_color="red")
+        import_status_label.place(x=10, y=45)
         getlinks()
 
+    background_thread.start()
 # Get all links from Database:
 def getlinks():
     url = "http://localhost/blocked"
@@ -127,13 +133,11 @@ def getlinks():
     response = requests.get(url)
     data = json.loads(response.text)
     id=1
+    if table.get_children():
+        table.delete(*table.get_children())
     for element in data:
-        # Abrufen der Werte der spezifischen Spalte in der Tabelle und Umwandlung in Strings
-        table_values = [str(table.item(row)['values'][1]) for row in table.get_children()]  # Ändern Sie den Index entsprechend Ihrer Tabelle
-        # Überprüfen, ob das Element (als String) bereits in den Werten der Tabelle vorhanden ist
-        if not str(element) in table_values:
-            table.insert(parent='',index='end',text='', values=(id,element))
-            id = id +1
+        table.insert(parent='',index='end',text='', values=(id,element))
+        id = id +1
     
 def on_select(event):
     selected_item = table.selection()[0]
@@ -149,7 +153,30 @@ def change_window_scaling(choice):
     table.row_stretch = 1.25
 
 def remove_rows():
-    print("remove")
+    background_thread = threading.Thread(target=reset)
+    item_id = table.selection()[0]
+    link = table.item(item_id)["values"][1]
+
+    url= f"http://localhost/delete?link={link}"
+    
+    try:
+        response = requests.delete(url)
+        buffer = json.loads(response.text)
+        
+        if buffer['success'] == True:
+            remove_button.configure(text="Deleted", fg_color="red")
+        elif buffer["success"] == False:
+            remove_button.configure(text=f"Error: {buffer["error"]}", fg_color="red")
+
+        table.delete(item_id)
+        getlinks()
+       
+ 
+    except:
+        remove_button.configure(text="Error", fg_color="red")
+        getlinks()
+
+    background_thread.start()
 
 def search(value_to_find):
     for i, row in enumerate(table.get_children()):
@@ -162,6 +189,25 @@ def search(value_to_find):
 def search_button_action():
     value = search_entry.get()
     search(value)
+
+def reset():
+    import_button.configure(state="disabled")
+    remove_button.configure(state="disabled")
+    time.sleep(1)
+    remove_button.configure(text="Remove selected Row")
+    import_status_label.place_forget()
+    import_button.configure(state="normal")
+    remove_button.configure(state="normal")
+
+def export_button_action():
+    url = "http://localhost/blocked"
+
+    response = requests.get(url)
+    data = json.loads(response.text)
+    with open('meine_datei.txt', 'w') as f:
+        json.dump(data, f)
+
+    os.system('meine_datei.txt')
         
 
 # --> Initalizing the Main Elements
@@ -295,6 +341,9 @@ import_button.place(x=365,y=10)
 import_status_label = customtkinter.CTkLabel(tabview.tab("Import/Export"), width = 405, fg_color="transparent", corner_radius=5, text = "")
 import_status_label.place(x=10, y=45)
 
+export_button = customtkinter.CTkButton(tabview.tab("Import/Export"), width= 450, text="Export Links", command = export_button_action)
+export_button.place(x=10,y=80)
+
 # --> Initalizing Elements of Tabview 1:
 table = ttk.Treeview(tabview1.tab("blocked Links"), height = 9)
 table['columns'] = ('link_id', 'link_name')
@@ -320,7 +369,7 @@ table.configure(yscrollcommand= table_scrollbar.set)
 sync_button = customtkinter.CTkButton(tabview1.tab("blocked Links"), width= 50, text="Sync", command = getlinks, image=sync_image)
 sync_button.place(x=5,y=0)
 
-remove_button = customtkinter.CTkButton(tabview1.tab("blocked Links"), width= 150, text="Remove selected Rows", command = remove_rows, image = remove_image, fg_color="red")
+remove_button = customtkinter.CTkButton(tabview1.tab("blocked Links"), width= 175, text="Remove selected Row", command = remove_rows, image = remove_image, fg_color="red")
 remove_button.place(x=85,y=0)
 
 search_entry = customtkinter.CTkEntry(tabview1.tab("blocked Links"), placeholder_text="Search", width= 100)
