@@ -1,5 +1,4 @@
 import customtkinter
-from PIL import Image
 import psutil
 import requests
 import json
@@ -7,6 +6,8 @@ from tkinter import ttk
 import time
 import threading
 import os
+import images.image as images
+import sys
 
 # --> Setting gernal aspects of custom Tkinter:
 
@@ -19,9 +20,13 @@ customtkinter.set_default_color_theme("dark-blue")  # Themes: "blue" (standard),
 # Deactivate automatic scaling
 customtkinter.deactivate_automatic_dpi_awareness()
 
-
+bild = images.start_image
 
 # --> Initalizing methods:
+
+#stop function called when closing window:
+def exit():
+    sys.exit()
 
 # Function showing current System Resoruces:
 def update_resources():
@@ -208,6 +213,14 @@ def export_button_action():
         json.dump(data, f)
 
     os.system('meine_datei.txt')
+
+def change_ip_button_action():
+    dialog = customtkinter.CTkInputDialog(text="Type in your new Ip Adress:", title="IP change")
+
+    newip = dialog.get_input()
+
+    with open('ip.cfg', 'w') as config:
+        json.dump(newip, config)
         
 
 # --> Initalizing the Main Elements
@@ -216,6 +229,9 @@ def export_button_action():
 app = customtkinter.CTk()
 app.geometry("600x600")
 app.title("Adblocker")
+app.protocol("WM_DELETE_WINDOW", exit)
+
+
 
 # Initalizing Menu-bar:
 menu = customtkinter.CTkFrame(master=app, width=150, height=600, border_width=1, border_color="#1F538D")
@@ -236,55 +252,22 @@ status_label = customtkinter.CTkLabel(master=app, width=440, height=30, text="",
 status_label.place(x=155,y=565)
 
 
-
-
-
-# --> initalizing Images:
-
-# Menu-bar Image:
-logo = customtkinter.CTkImage(light_image=Image.open("icons8-adblocking-96.png"), dark_image=Image.open("icons8-adblocking-96.png"),size=(128,128))
-logo_label = customtkinter.CTkLabel(menu, image=logo, text="")
-logo_label.place(x=11,y=10)
-
-# "Change Theme" button Image:
-theme_image = customtkinter.CTkImage(light_image=Image.open("icons8-night-mode-24.png"), dark_image=Image.open("icons8-night-mode-24.png"),size=(20,20))
-
-# "Start" button Image:
-start_image = customtkinter.CTkImage(light_image=Image.open("icons8-spielen-26.png"), dark_image=Image.open("icons8-spielen-26.png"),size=(20,20))
-
-# "Stop" button Image:
-stop_image = customtkinter.CTkImage(light_image=Image.open("icons8-stop-26.png"), dark_image=Image.open("icons8-stop-26.png"),size=(20,20))
-
-# "Home" button Image:
-home_image = customtkinter.CTkImage(light_image=Image.open("icons8-zuhause-26.png"), dark_image=Image.open("icons8-zuhause-26.png"),size=(20,20))
-
-# "Settings" button Image:
-settings_image = customtkinter.CTkImage(light_image=Image.open("icons8-einstellungen-50.png"), dark_image=Image.open("icons8-einstellungen-50.png"),size=(20,20))
-
-# "About" button Image:
-about_image = customtkinter.CTkImage(light_image=Image.open("icons8-info-50.png"), dark_image=Image.open("icons8-info-50.png"),size=(20,20))
-
-# "Sync" button Image:
-sync_image = customtkinter.CTkImage(light_image=Image.open("icons8-synchronisieren-48.png"), dark_image=Image.open("icons8-synchronisieren-48.png"),size=(20,20))
-
-# "Remove" button Image:
-remove_image = customtkinter.CTkImage(light_image=Image.open("icons8-entfernen-24.png"), dark_image=Image.open("icons8-entfernen-24.png"),size=(20,20))
-
-# "Remove" button Image:
-search_image = customtkinter.CTkImage(light_image=Image.open("icons8-suche-50.png"), dark_image=Image.open("icons8-suche-50.png"),size=(20,20))
-
 # --> Initalizing Elements of the Menu-bar:
+
+# Image:
+logo_label = customtkinter.CTkLabel(menu, image= images.logo, text="")
+logo_label.place(x=11,y=10)
 
 # "Menu" label:
 label = customtkinter.CTkLabel(menu, width=140,text="AD Blocker - Menu",fg_color=("#3A7EBF", "#1F538D"),text_color="white", corner_radius= 5)
 label.place(x=5,y=150)
 
 # "Start" button:
-button_start = customtkinter.CTkButton(menu, width=140, text="Start", command = start_button_action, image=start_image, fg_color="green")
+button_start = customtkinter.CTkButton(menu, width=140, text="Start", command = start_button_action, image=images.start_image, fg_color="green")
 button_start.place(x=5, y= 200)
 
 # "Stop" button:
-button_stop = customtkinter.CTkButton(menu, width=140, text="Stop", command = stop_button_action, image=stop_image, fg_color="red")
+button_stop = customtkinter.CTkButton(menu, width=140, text="Stop", command = stop_button_action, image=images.stop_image, fg_color="red")
 button_stop.place(x=5, y= 235)
 
 # "CPU" label:
@@ -296,22 +279,22 @@ ram_label = customtkinter.CTkLabel(menu, width=140,fg_color=("#3A7EBF", "#1F538D
 ram_label.place(x=5,y=320)
 
 # Button "Light" Theme:
-button_light_theme = customtkinter.CTkButton(menu, width=140, text="Switch Theme", command=theme_change_light, image=theme_image)
+button_light_theme = customtkinter.CTkButton(menu, width=140, text="Switch Theme", command=theme_change_light, image=images.theme_image)
 button_light_theme.place(x=5,y=450)
 
 # Button "Dark" Theme:
-button_dark_theme = customtkinter.CTkButton(menu,width=140, text="Switch Theme", command=theme_change_dark, image=theme_image)
+button_dark_theme = customtkinter.CTkButton(menu,width=140, text="Switch Theme", command=theme_change_dark, image=images.theme_image)
 
 # "Home" button:
-button_home = customtkinter.CTkButton(menu, width=140, text="Home", command = home_button_action, image=home_image)
+button_home = customtkinter.CTkButton(menu, width=140, text="Home", command = home_button_action, image=images.home_image)
 button_home.place(x=5, y= 495)
 
 # "About" button:
-button_about = customtkinter.CTkButton(menu, width=140, text="About", command = about_button_action, image=about_image)
+button_about = customtkinter.CTkButton(menu, width=140, text="About", command = about_button_action, image=images.about_image)
 button_about.place(x=5, y= 530)
 
 # "Settings" button:
-button_settings = customtkinter.CTkButton(menu, width=140, text="Settings", command = settings_button_action,  image=settings_image)
+button_settings = customtkinter.CTkButton(menu, width=140, text="Settings", command = settings_button_action,  image=images.settings_image)
 button_settings.place(x=5,y=565)
 
 
@@ -366,16 +349,16 @@ table_scrollbar.pack(side='right', fill='y')
 
 table.configure(yscrollcommand= table_scrollbar.set)
 
-sync_button = customtkinter.CTkButton(tabview1.tab("blocked Links"), width= 50, text="Sync", command = getlinks, image=sync_image)
+sync_button = customtkinter.CTkButton(tabview1.tab("blocked Links"), width= 50, text="Sync", command = getlinks, image=images.sync_image)
 sync_button.place(x=5,y=0)
 
-remove_button = customtkinter.CTkButton(tabview1.tab("blocked Links"), width= 175, text="Remove selected Row", command = remove_rows, image = remove_image, fg_color="red")
+remove_button = customtkinter.CTkButton(tabview1.tab("blocked Links"), width= 175, text="Remove selected Row", command = remove_rows, image = images.remove_image, fg_color="red")
 remove_button.place(x=85,y=0)
 
 search_entry = customtkinter.CTkEntry(tabview1.tab("blocked Links"), placeholder_text="Search", width= 100)
 search_entry.place(x=268,y=0)
 
-search_button = customtkinter.CTkButton(tabview1.tab("blocked Links"), width= 15, text="", command = search_button_action, image = search_image)
+search_button = customtkinter.CTkButton(tabview1.tab("blocked Links"), width= 15, text="", command = search_button_action, image = images.search_image)
 search_button.place(x=375,y=0)
 
 # --> Initalizing Elements of About:
@@ -408,6 +391,10 @@ window_scaling_text.place(x=5,y=105)
 window_scaling_optionmenu = customtkinter.CTkOptionMenu(settings_frame, values=["100","125","150","175","200","225","250"], command=change_window_scaling)
 window_scaling_optionmenu.place(x=155,y=105)
 
-getlinks()
-update_resources()
-app.mainloop()
+#IP change text:
+ip_change_text = customtkinter.CTkLabel(settings_frame, text="Change IP:", width=140, fg_color="transparent",font=("",20))
+ip_change_text.place(x=5,y=140)
+
+#Ip Change button
+ip_change_button = customtkinter.CTkButton(settings_frame, text="change Ip Adress", width=140, command=change_ip_button_action)
+ip_change_button.place(x=155,y=140)
