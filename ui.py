@@ -8,7 +8,6 @@ import threading
 import os
 import images.image as images
 import sys
-
 # --> Setting gernal aspects of custom Tkinter:
 
 #set Appearance Mode to the operating System default value
@@ -16,9 +15,6 @@ customtkinter.set_appearance_mode("dark")
 
 #set default color theme
 customtkinter.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
-
-# Deactivate automatic scaling
-customtkinter.deactivate_automatic_dpi_awareness()
 
 bild = images.start_image
 
@@ -248,7 +244,7 @@ about_frame = customtkinter.CTkFrame(master=app, width=450, height=600, fg_color
 settings_frame = customtkinter.CTkFrame(master=app, width=450, height=600, fg_color="transparent")
 
 # Initalizing Progressbar:
-status_label = customtkinter.CTkLabel(master=app, width=440, height=30, text="", corner_radius=5, fg_color="blue")
+status_label = customtkinter.CTkLabel(master=app, width=440, height=30, text="", corner_radius=5, fg_color=("#3A7EBF", "#1F538D"))
 status_label.place(x=155,y=565)
 
 
@@ -328,7 +324,15 @@ export_button = customtkinter.CTkButton(tabview.tab("Import/Export"), width= 450
 export_button.place(x=10,y=80)
 
 # --> Initalizing Elements of Tabview 1:
-table = ttk.Treeview(tabview1.tab("blocked Links"), height = 9)
+
+# Erstelle einen ttk-Stil
+style = ttk.Style ()
+
+# Ändere die Schriftart und die Schriftgröße der Überschriften
+style.configure("Treeview.Heading", font=(None, 15))
+style.configure("Treeview", font=(None, 13))
+
+table = ttk.Treeview(tabview1.tab("blocked Links"))
 table['columns'] = ('link_id', 'link_name')
 
 table.column("#0", width=0, stretch="no")
@@ -341,7 +345,8 @@ table.heading("link_name",text="Link",anchor="center")
 
 table.bind("<ButtonRelease-1>", on_select)
 
-table.place(x=5,y=35)
+table.place(x=5,y=50, width=600, height=320)
+#
 
 # create scrollbar for Table
 table_scrollbar = customtkinter.CTkScrollbar(tabview1.tab("blocked Links"), command=table.yview)
@@ -388,7 +393,7 @@ window_scaling_text = customtkinter.CTkLabel(settings_frame, text="Scaling:", wi
 window_scaling_text.place(x=5,y=105)
 
 #Windwos-scaling Drop-Down:
-window_scaling_optionmenu = customtkinter.CTkOptionMenu(settings_frame, values=["100","125","150","175","200","225","250"], command=change_window_scaling)
+window_scaling_optionmenu = customtkinter.CTkOptionMenu(settings_frame, values=["75","100","125","150","175","200","225","250"], command=change_window_scaling)
 window_scaling_optionmenu.place(x=155,y=105)
 
 #IP change text:
