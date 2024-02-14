@@ -20,6 +20,12 @@ bild = images.start_image
 
 # --> Initalizing methods:
 
+def start():
+    update_resources()
+    getlinks()
+    app.mainloop()
+
+
 #stop function called when closing window:
 def exit():
     sys.exit()
@@ -80,7 +86,10 @@ def settings_button_action():
 
 # "Start" Button Action:
 def start_button_action():
-    url= "http://localhost/start"
+    with open('ip.cfg', "r") as f:
+        Host_url = json.load(f)
+    
+    url= f"http://{Host_url}/start"
     
     try:
         response = requests.post(url)
@@ -92,7 +101,10 @@ def start_button_action():
         status_label.configure(text=f"Unable to reach Server", fg_color="#990000")
 
 def stop_button_action():
-    url= "http://localhost/stop"
+    with open('ip.cfg', "r") as f:
+        Host_url = json.load(f)
+
+    url= f"http://{Host_url}/stop"
     
     try:
         response = requests.post(url)
@@ -105,9 +117,12 @@ def stop_button_action():
 
 # Import Links to the Database:
 def import_button_action():
+    with open('ip.cfg', "r") as f:
+        Host_url = json.load(f)
+
     background_thread = threading.Thread(target=reset)
     link= link_entry.get()
-    url= f"http://localhost/add?link={link}"
+    url= f"http://{Host_url}/add?link={link}"
     
     try:
         response = requests.post(url)
@@ -129,7 +144,10 @@ def import_button_action():
     background_thread.start()
 # Get all links from Database:
 def getlinks():
-    url = "http://localhost/blocked"
+    with open('ip.cfg', "r") as f:
+        Host_url = json.load(f)
+
+    url = f"http://{Host_url}/blocked"
 
     response = requests.get(url)
     data = json.loads(response.text)
@@ -154,11 +172,14 @@ def change_window_scaling(choice):
     table.row_stretch = 1.25
 
 def remove_rows():
+    with open('ip.cfg', "r") as f:
+        Host_url = json.load(f)
+
     background_thread = threading.Thread(target=reset)
     item_id = table.selection()[0]
     link = table.item(item_id)["values"][1]
 
-    url= f"http://localhost/delete?link={link}"
+    url= f"http://{Host_url}/delete?link={link}"
     
     try:
         response = requests.delete(url)
@@ -201,7 +222,10 @@ def reset():
     remove_button.configure(state="normal")
 
 def export_button_action():
-    url = "http://localhost/blocked"
+    with open('ip.cfg', "r") as f:
+        Host_url = json.load(f)
+
+    url = f"http://{Host_url}/blocked"
 
     response = requests.get(url)
     data = json.loads(response.text)

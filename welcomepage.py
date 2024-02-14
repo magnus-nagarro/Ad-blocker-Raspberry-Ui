@@ -1,17 +1,32 @@
 import ui
 
 def start_button_action():
-    welcomepage.withdraw()
-
-    ui.getlinks()
-    ui.update_resources()
-
     hosturl = ip_entry.get()
 
-    with open('ip.cfg', 'w') as f:
-        ui.json.dump(hosturl, f)
+    url= f"http://{hosturl}/blocked"
+    
+    try:
+        response = ui.requests.get(url)
+    except:
+        error_label.configure(width=384,text="It seems, that something went wrong wile connecting to Ad-Blocker. \n Please verify if IP-adress is correct and the blocker is running",fg_color=("red"),text_color="white", corner_radius= 5, font=("Arial", 12))   
 
-    ui.app.mainloop()
+    if response.status_code == 200:
+        welcomepage.withdraw()
+        error_label.place_forget()
+
+        with open('ip.cfg', 'w') as f:
+            ui.json.dump(hosturl, f)
+
+        ui.start()
+
+    else:
+        error_label.configure(width=384,text="It seems, that something went wrong wile connecting to Ad-Blocker. \n Please verify if IP-adress is correct and the blocker is running",fg_color=("red"),text_color="white", corner_radius= 5, font=("Arial", 12))    
+        
+
+
+
+
+   
 
 def start():
     with open('ip.cfg', "r") as f:
@@ -22,9 +37,9 @@ def start():
     if url == "":
         welcomepage.mainloop()
     else:
-        ui.getlinks()
-        ui.update_resources()
-        ui.app.mainloop()
+       ui.getlinks()
+       ui.update_resources
+       ui.app.mainloop()
         
 
 def exit():
@@ -44,9 +59,12 @@ Ip_text_label = ui.customtkinter.CTkLabel(welcomepage, width=384,text="In order 
 Ip_text_label.place(x=0,y=175)
 
 ip_entry = ui.customtkinter.CTkEntry(welcomepage, placeholder_text="Enter IP-Adress", width= 128)
-ip_entry.place(x=128,y=230)
+ip_entry.place(x=100,y=230)
+
+error_label = ui.customtkinter.CTkLabel(welcomepage, text="")
+error_label.place(x=0,y=275)
 
 start_button = ui.customtkinter.CTkButton(welcomepage, width=50, text="Start", command = start_button_action)
-start_button.place(x=310,y=275)
+start_button.place(x=233,y=230)
 
 start()
