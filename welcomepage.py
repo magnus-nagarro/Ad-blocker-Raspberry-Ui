@@ -12,7 +12,7 @@ class Welcomepage(customtkinter.CTk):
         self.title("Welcome")
         self.protocol("WM_DELETE_WINDOW", exit)
         
-        self.image_label = customtkinter.CTkLabel(self, width=128,text="", image= images.logo_welcome)
+        self.image_label = customtkinter.CTkLabel(self, width=128,text="", image= images.logo)
         self.image_label.place(x=128,y=0)
 
         self.welcome_label = customtkinter.CTkLabel(self, width=384,text="Welcome to Adblocker!",fg_color=("transparent"),text_color="white", corner_radius= 5, font=("Arial", 20))

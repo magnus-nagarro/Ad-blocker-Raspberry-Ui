@@ -39,7 +39,7 @@ class UserInterface(customtkinter.CTkToplevel):
         # --> Initalizing Elements of the Menu-bar:
 
         # Image:
-        self.logo_label = customtkinter.CTkLabel(self.menu, image= images.logo_ui, text="")
+        self.logo_label = customtkinter.CTkLabel(self.menu, image= images.logo, text="")
         self.logo_label.place(x=11,y=10)
 
         # "Menu" label:
