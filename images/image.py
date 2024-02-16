@@ -4,10 +4,8 @@ import customtkinter
 from PIL import Image
 
 
-
-
 # Menu-bar Image:
-logo = customtkinter.CTkImage(light_image=Image.open("images\Adblocker_icon.png"), dark_image=Image.open("images\Adblocker_icon.png"),size=(128,128))
+logo_ui = customtkinter.CTkImage(light_image=Image.open("images\yblocker.png"), dark_image=Image.open("images\yblocker.png"),size=(128,128))
 
 # "Change Theme" button Image:
 theme_image = customtkinter.CTkImage(light_image=Image.open("images\icons8-night-mode-24.png"), dark_image=Image.open("images\icons8-night-mode-24.png"),size=(20,20))
@@ -36,3 +34,5 @@ remove_image = customtkinter.CTkImage(light_image=Image.open("images\icons8-entf
 # "Remove" button Image:
 search_image = customtkinter.CTkImage(light_image=Image.open("images\icons8-suche-50.png"), dark_image=Image.open("images\icons8-suche-50.png"),size=(20,20))
 
+# Welcomepage Image:
+logo_welcome = customtkinter.CTkImage(light_image=Image.open("images\yblocker.png"), dark_image=Image.open("images\yblocker.png"),size=(128,128))
