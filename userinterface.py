@@ -9,6 +9,19 @@ from tkinter import ttk
 import sys
 import json
 
+class AboutFrame(customtkinter.CTkFrame):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+
+        about_text="Adblocker by Alex, Amir an Magnus.\n\nThis software was developed as part of a student project for the Baden-Württemberg Cooperative State University in Lörrach. It is for private use only and is not accessible to the public. The blocking software was primarily developed for and tested on the Rapsberry Pi. The user interface of the blocking software was implemented and tested for Windows devices in the network.\n\nThe mission of this software is simple: the aim is to block as much advertising as possible on any website. To do this, the link of the advertisement must be determined and imported into the blacklist contained in the software. The user therefore has the option of determining the blocked pages himself, but also of blocking links from external sources. The software also shows the user statistics on how many links have been blocked at the moment/total.\n\nCompatibility:\n- Blocker software: The Blocker software is only compatible with Docker-enabled devices. It was primarily tested and developed for Raspberry Pi. Compatibility with other dockers may be given, but is not guaranteed.\n- Please make sure that Docker is installed and working on your host.\n- User interface: The user interface was developed and tested on Windows. Compatibility with other python-enabled devices (Mac/Linux) cannot be guaranteed.\n\nContact:\n\nIf you have any problems installing or using the software, please contact\n\n- Blocker Software: magnus.scherrmann@nagarro.com\n- User interface : alexander.bauer@nagarro.com\n\nFor general questions, requests or suggestions, please contact:\n\namir.gharbi@nagarro.com\n\nThis software is for private use only and should not be made available to the public."
+
+        # add widgets onto the frame...
+        self.about_h1 = customtkinter.CTkLabel(self, text="About", width=440, fg_color="transparent",font=("",40))
+        self.about_h1.pack()
+
+        self.about_text = customtkinter.CTkTextbox(self, width=440, height = 510, fg_color="transparent",font=("",14), wrap = "word")
+        self.about_text.insert("0.0", about_text) 
+        self.about_text.pack()
 
 class UserInterface(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
@@ -26,7 +39,7 @@ class UserInterface(customtkinter.CTkToplevel):
         self.main_frame.place(x=150,y=0)
 
         # Initalizing About-frame:
-        self.about_frame = customtkinter.CTkFrame(self, width=450, height=600, fg_color="transparent")
+        self.about_frame = AboutFrame(self, width=420, height=540)
 
         # Initalizing Settings-frame:
         self.settings_frame = customtkinter.CTkFrame(self, width=450, height=600, fg_color="transparent")
@@ -162,9 +175,8 @@ class UserInterface(customtkinter.CTkToplevel):
 
         # --> Initalizing Elements of About:
 
-        #h1
-        self.about_h1 = customtkinter.CTkLabel(self.about_frame, text="About", width=440, fg_color="transparent",font=("",40))
-        self.about_h1.place(x=5,y=10)
+        
+    
 
 
 
@@ -257,7 +269,7 @@ class UserInterface(customtkinter.CTkToplevel):
     def about_button_action(self):
         self.main_frame.place_forget()
         self.settings_frame.place_forget()
-        self.about_frame.place(x=150,y=0)
+        self.about_frame.place(x=155,y=0)
 
     # "Settings" Button Action:
     def settings_button_action(self):
@@ -369,7 +381,7 @@ class UserInterface(customtkinter.CTkToplevel):
             if buffer['success'] == True:
                 self.remove_button.configure(text="Deleted", fg_color="red")
             elif buffer["success"] == False:
-                self.fremove_button.configure(text=f"Error: {buffer["error"]}", fg_color="red")
+                self.remove_button.configure(text=f"Error: {buffer["error"]}", fg_color="red")
 
             self.table.delete(item_id)
             self.getlinks()

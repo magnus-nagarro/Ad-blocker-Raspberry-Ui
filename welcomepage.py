@@ -10,7 +10,7 @@ class Welcomepage(customtkinter.CTk):
         super().__init__(*args, **kwargs)
         self.geometry("384x308")
         self.title("Welcome")
-        self.protocol("WM_DELETE_WINDOW", exit)
+        
         
         self.image_label = customtkinter.CTkLabel(self, width=128,text="", image= images.logo)
         self.image_label.place(x=128,y=0)
@@ -90,8 +90,7 @@ class Welcomepage(customtkinter.CTk):
             else:
                 self.error_label.configure(width=384,text="It seems, that something went wrong wile connecting to Ad-Blocker. \n Please verify if IP-adress is correct and the blocker is running",fg_color=("red"),text_color="white", corner_radius= 5, font=("Arial", 12))
                 self.mainloop()
-    def exit():
-        sys.exit()
+    
 
 wp = Welcomepage()
 wp.start()
