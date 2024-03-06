@@ -1,9 +1,4 @@
-import userinterface as ui
-import images.image as images
-import customtkinter
-import json
-import requests
-import sys
+from __init__ import *
 
 class Welcomepage(customtkinter.CTk):
     def __init__(self, *args, **kwargs):

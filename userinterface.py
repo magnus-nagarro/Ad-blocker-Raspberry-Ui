@@ -1,13 +1,4 @@
-import images.image as images
-import customtkinter
-import time
-import requests
-import threading
-import psutil
-import os
-from tkinter import ttk
-import sys
-import json
+from  __init__ import *
 
 class HomeFrame(customtkinter.CTkFrame):
     def __init__(self, *args, **kwargs):
@@ -169,7 +160,6 @@ class HomeFrame(customtkinter.CTkFrame):
             if row_value == value_to_find:
                 self.table.selection_set(row)
                 self.table.yview(i)  # Scrollen Sie zur Zeile
-                return
 
     def search_button_action(self):
         value = self.search_entry.get()
@@ -202,8 +192,8 @@ class SettingsFrame(customtkinter.CTkFrame):
         super().__init__(*args, **kwargs)
 
         #h1:
-        self.settings_h1 = customtkinter.CTkLabel(self, text="Settings", width=440, fg_color="transparent",font=("",40))
-        self.settings_h1.place(x=5,y=10)
+        self.settings_header = customtkinter.CTkLabel(self, text="Settings", width=440, fg_color="transparent",font=("",40))
+        self.settings_header.place(x=5,y=10)
 
         #Theme text:
         self.theme_text = customtkinter.CTkLabel(self, text="Theme:", width=140, fg_color="transparent",font=("",20))
@@ -263,15 +253,15 @@ class AboutFrame(customtkinter.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 
-        about_text="Adblocker by Alex, Amir an Magnus.\n\nThis software was developed as part of a student project for the Baden-Württemberg Cooperative State University in Lörrach. It is for private use only and is not accessible to the public. The blocking software was primarily developed for and tested on the Rapsberry Pi. The user interface of the blocking software was implemented and tested for Windows devices in the network.\n\nThe mission of this software is simple: the aim is to block as much advertising as possible on any website. To do this, the link of the advertisement must be determined and imported into the blacklist contained in the software. The user therefore has the option of determining the blocked pages himself, but also of blocking links from external sources. The software also shows the user statistics on how many links have been blocked at the moment/total.\n\nCompatibility:\n- Blocker software: The Blocker software is only compatible with Docker-enabled devices. It was primarily tested and developed for Raspberry Pi. Compatibility with other dockers may be given, but is not guaranteed.\n- Please make sure that Docker is installed and working on your host.\n- User interface: The user interface was developed and tested on Windows. Compatibility with other python-enabled devices (Mac/Linux) cannot be guaranteed.\n\nContact:\n\nIf you have any problems installing or using the software, please contact\n\n- Blocker Software: magnus.scherrmann@nagarro.com\n- User interface : alexander.bauer@nagarro.com\n\nFor general questions, requests or suggestions, please contact:\n\namir.gharbi@nagarro.com\n\nThis software is for private use only and should not be made available to the public."
+        about_text="Adblocker by Alex, Amir and Magnus.\n\nThis software was developed as part of a student project for the Baden-Württemberg Cooperative State University in Lörrach. It is for private use only and is not accessible to the public. The blocking software was primarily developed for and tested on the Rapsberry Pi. The user interface of the blocking software was implemented and tested for Windows devices in the network.\n\nThe mission of this software is simple: the aim is to block as much advertising as possible on any website. To do this, the link of the advertisement must be determined and imported into the blacklist contained in the software. The user therefore has the option of determining the blocked pages himself, but also of blocking links from external sources. The software also shows the user statistics on how many links have been blocked at the moment/total.\n\nCompatibility:\n- Blocker software: The Blocker software is only compatible with Docker-enabled devices. It was primarily tested and developed for Raspberry Pi. Compatibility with other dockers may be given, but is not guaranteed.\n- Please make sure that Docker is installed and working on your host.\n- User interface: The user interface was developed and tested on Windows. Compatibility with other python-enabled devices (Mac/Linux) cannot be guaranteed.\n\nContact:\n\nIf you have any problems installing or using the software, please contact\n\n- Blocker Software: magnus.scherrmann@nagarro.com\n- User interface : alexander.bauer@nagarro.com\n\nFor general questions, requests or suggestions, please contact:\n\namir.gharbi@nagarro.com\n\nThis software is for private use only and should not be made available to the public."
 
         # add widgets onto the frame...
         self.about_h1 = customtkinter.CTkLabel(self, text="About", width=440, fg_color="transparent",font=("",40))
         self.about_h1.pack()
 
-        self.about_text = customtkinter.CTkTextbox(self, width=440, height = 510, fg_color="transparent",font=("",14), wrap = "word")
-        self.about_text.insert("0.0", about_text) 
-        self.about_text.pack()
+        self.about_textbox = customtkinter.CTkTextbox(self, width=440, height = 510, fg_color="transparent",font=("",14), wrap = "word")
+        self.about_textbox.insert("0.0", about_text) 
+        self.about_textbox.pack()
 
 class UserInterface(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
@@ -306,8 +296,8 @@ class UserInterface(customtkinter.CTkToplevel):
         self.logo_label.place(x=11,y=10)
 
         # "Menu" label:
-        self.label = customtkinter.CTkLabel(self.menu, width=140,text="AD Blocker - Menu",fg_color=("#3A7EBF", "#1F538D"),text_color="white", corner_radius= 5)
-        self.label.place(x=5,y=150)
+        self.menu_label = customtkinter.CTkLabel(self.menu, width=140,text="AD Blocker - Menu",fg_color=("#3A7EBF", "#1F538D"),text_color="white", corner_radius= 5)
+        self.menu_label.place(x=5,y=150)
 
         # "Start" button:
         self.button_start = customtkinter.CTkButton(self.menu, width=140, text="Start", command = self.start_button_action, image=images.start_image, fg_color="green")
