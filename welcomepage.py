@@ -1,5 +1,6 @@
 from __init__ import *
 
+# --> Initalizes all Elements of the Welcomepage/Ip entry:
 class Welcomepage(customtkinter.CTk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -29,6 +30,7 @@ class Welcomepage(customtkinter.CTk):
         
         self.toplevel_window = None
 
+    # Starting User Interface if IP already exists:
     def start_button_action(self):
         hosturl = self.ip_entry.get()
 
@@ -52,11 +54,13 @@ class Welcomepage(customtkinter.CTk):
         else:
             self.error_label.configure(width=384,text="It seems, that something went wrong wile connecting to Ad-Blocker. \n Please verify if IP-adress is correct and the blocker is running",fg_color=("red"),text_color="white", corner_radius= 5, font=("Arial", 12))
     
+    # Starting User Interface after IP entry:
     def go_button_action(self):
         self.toplevel_window = ui.UserInterface(self)
         ui.UserInterface.start(self.toplevel_window)
         self.withdraw()
 
+    # Starting the Ip Entry, checking if the Ip-adress is correct, and starting the program if everything is ok
     def start(self):
         with open("ip.cfg", "r") as f:
             url = json.load(f)
@@ -78,9 +82,6 @@ class Welcomepage(customtkinter.CTk):
                 self.start_button.place_forget()
                 self.go_button.place(x=167,y=230)
                 self.mainloop()
-
-                # self.toplevel_window = ui.UserInterface(self)
-                # ui.UserInterface.start(self.toplevel_window)
         
             else:
                 self.error_label.configure(width=384,text="It seems, that something went wrong wile connecting to Ad-Blocker. \n Please verify if IP-adress is correct and the blocker is running",fg_color=("red"),text_color="white", corner_radius= 5, font=("Arial", 12))

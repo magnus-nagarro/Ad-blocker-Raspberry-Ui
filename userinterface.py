@@ -1,5 +1,6 @@
 from  __init__ import *
 
+# --> Initalizing Elements of Home-Frame:
 class HomeFrame(customtkinter.CTkFrame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -102,6 +103,7 @@ class HomeFrame(customtkinter.CTkFrame):
             self.getlinks()
 
         background_thread.start()
+        
     # Get all links from Database:
     def getlinks(self):
         with open('ip.cfg', "r") as f:
@@ -117,14 +119,8 @@ class HomeFrame(customtkinter.CTkFrame):
         for element in data:
             self.table.insert(parent='',index='end',text='', values=(id,element))
             id = id +1
-        
-    def on_select(self,event):
-        selected_item = self.table.selection()[0]
-        values = self.table.item(selected_item, 'values')
-        print(values)
 
-    
-
+    # Remove selected row from the table:
     def remove_rows(self):
         with open('ip.cfg', "r") as f:
             Host_url = json.load(f)
@@ -154,6 +150,7 @@ class HomeFrame(customtkinter.CTkFrame):
 
         background_thread.start()
 
+    # Search for a link:
     def search(self,value_to_find):
         for i, row in enumerate(self.table.get_children()):
             row_value = self.table.item(row)["values"][1]  # Ändern Sie den Index basierend auf der Spalte, in der Sie suchen möchten
@@ -161,10 +158,12 @@ class HomeFrame(customtkinter.CTkFrame):
                 self.table.selection_set(row)
                 self.table.yview(i)  # Scrollen Sie zur Zeile
 
+    # "Search" Button Action:
     def search_button_action(self):
         value = self.search_entry.get()
         self.search(value)
 
+    # Reset Action after Thread has finished
     def reset(self):
         self.import_button.configure(state="disabled")
         self.remove_button.configure(state="disabled")
@@ -174,6 +173,7 @@ class HomeFrame(customtkinter.CTkFrame):
         self.import_button.configure(state="normal")
         self.remove_button.configure(state="normal")
 
+    # "Export" Button Action:
     def export_button_action(self):
         with open('ip.cfg', "r") as f:
             Host_url = json.load(f)
@@ -187,6 +187,7 @@ class HomeFrame(customtkinter.CTkFrame):
 
         os.system('meine_datei.txt')
 
+# --> Initalizing Elements of the Settings-Frame:
 class SettingsFrame(customtkinter.CTkFrame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -249,13 +250,13 @@ class SettingsFrame(customtkinter.CTkFrame):
         with open('ip.cfg', 'w') as config:
             json.dump(newip, config)
 
+# --> Initalizing Elements of the About-Frame:
 class AboutFrame(customtkinter.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
 
         about_text="Adblocker by Alex, Amir and Magnus.\n\nThis software was developed as part of a student project for the Baden-Württemberg Cooperative State University in Lörrach. It is for private use only and is not accessible to the public. The blocking software was primarily developed for and tested on the Rapsberry Pi. The user interface of the blocking software was implemented and tested for Windows devices in the network.\n\nThe mission of this software is simple: the aim is to block as much advertising as possible on any website. To do this, the link of the advertisement must be determined and imported into the blacklist contained in the software. The user therefore has the option of determining the blocked pages himself, but also of blocking links from external sources. The software also shows the user statistics on how many links have been blocked at the moment/total.\n\nCompatibility:\n- Blocker software: The Blocker software is only compatible with Docker-enabled devices. It was primarily tested and developed for Raspberry Pi. Compatibility with other dockers may be given, but is not guaranteed.\n- Please make sure that Docker is installed and working on your host.\n- User interface: The user interface was developed and tested on Windows. Compatibility with other python-enabled devices (Mac/Linux) cannot be guaranteed.\n\nContact:\n\nIf you have any problems installing or using the software, please contact\n\n- Blocker Software: magnus.scherrmann@nagarro.com\n- User interface : alexander.bauer@nagarro.com\n\nFor general questions, requests or suggestions, please contact:\n\namir.gharbi@nagarro.com\n\nThis software is for private use only and should not be made available to the public."
 
-        # add widgets onto the frame...
         self.about_h1 = customtkinter.CTkLabel(self, text="About", width=440, fg_color="transparent",font=("",40))
         self.about_h1.pack()
 
@@ -263,6 +264,7 @@ class AboutFrame(customtkinter.CTkFrame):
         self.about_textbox.insert("0.0", about_text) 
         self.about_textbox.pack()
 
+# --> Initalizing Elements of the Main-frame:
 class UserInterface(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -399,6 +401,7 @@ class UserInterface(customtkinter.CTkToplevel):
         except:
             self.status_label.configure(text=f"Unable to reach Server", fg_color="#990000")
 
+    # "Stop" Button Action:
     def stop_button_action(self):
         with open('ip.cfg', "r") as f:
             Host_url = json.load(f)
