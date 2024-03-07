@@ -12,7 +12,7 @@ Please be sure to configure the Ad-blocker first!
 
 ### 1. Clone Repository ###
 
-Please clone this repository to a folder of your choice or to a folder of your choice.
+Please clone this repository to a folder of your choic.
 
 ```cmd
 cd path/to/your/floder
@@ -59,9 +59,11 @@ At the bottom of the UI, you can the StatusBar. It shows you the current status 
 
 ### 1. MainFrame ###
 
-On the right side there's the MainFrame, including Statistics and a table with all current blocked links, by default.
+On the right side there's the MainFrame, including Import/Export of links and a table with all current blocked links, by default. To add links, type it into the textfield and select "Add". If the link has been imported correctly, this is confirmed by the green confirmation. If an error has occurred, this will also be displayed here. If the link you entered already exists, this will also be displayed.
 
-By clicking Import/Export you can change the StatisticsFrame to the Import/Export Frame. Here you can import new links to the database and export all current links in a file. 
+You can export the links here too. A text file with all links will be created and opend so you can device where you want to save it.
+
+There's currently no fuction to import links via textfiles!
 
 On the TableFrame you can search current blocked links. Also there's the opportunity tho delete some of these links. To delete links, select the row and press the delete button. The link is now deleted from the database.
 
@@ -70,7 +72,7 @@ On the TableFrame you can search current blocked links. Also there's the opportu
 
 If you click the Settingsbutton in the MenueBar the SettingsFrame appears. 
 
-Here you can change the scaling factor of the window and the current themeclor.
+Here you can change the scaling factor of the window, the current theme-color and the Ip address, if that of the blocker device has changed.
 
 ### 3. AboutFrame ###
 

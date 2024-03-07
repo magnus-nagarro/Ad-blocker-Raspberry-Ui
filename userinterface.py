@@ -8,9 +8,8 @@ class HomeFrame(customtkinter.CTkFrame):
         # Initalizing Tabview Widget:
         self.tabview = customtkinter.CTkTabview(self,width=440, border_color=("#1F538D"), border_width=1, anchor="nw")
         self.tabview.place(x=5,y=0)
-        self.tabview.add("Statistics")  
         self.tabview.add("Import/Export")  
-        self.tabview.set("Statistics")  
+        self.tabview.set("Import/Export")  
 
         self.tabview1 = customtkinter.CTkTabview(self,width=440, height = 300, border_color=("#1F538D"), border_width=1, anchor="nw")
         self.tabview1.place(x=5,y=250)
@@ -54,7 +53,7 @@ class HomeFrame(customtkinter.CTkFrame):
         self.table.heading("link_id",text="Id",anchor="center")
         self.table.heading("link_name",text="Link",anchor="center")
 
-        self.table.bind("<ButtonRelease-1>", self.on_select)
+        # self.table.bind("<ButtonRelease-1>", self.on_select)
 
         self.table.place(x=5,y=50, width=600, height=320)
 
