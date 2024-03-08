@@ -35,10 +35,10 @@ class HomeFrame(customtkinter.CTkFrame):
 
         # --> Initalizing Elements of Tabview 1:
 
-        # Erstelle einen ttk-Stil
+        # Create Tkk style
         self.style = ttk.Style ()
 
-        # Ändere die Schriftart und die Schriftgröße der Überschriften
+        # Configure Tkk style
         self.style.configure("Treeview.Heading", font=(None, 15))
         self.style.configure("Treeview", font=(None, 13))
 
@@ -52,8 +52,6 @@ class HomeFrame(customtkinter.CTkFrame):
         self.table.heading("#0",text="",anchor="center")
         self.table.heading("link_id",text="Id",anchor="center")
         self.table.heading("link_name",text="Link",anchor="center")
-
-        # self.table.bind("<ButtonRelease-1>", self.on_select)
 
         self.table.place(x=5,y=50, width=600, height=320)
 
@@ -238,8 +236,6 @@ class SettingsFrame(customtkinter.CTkFrame):
         scale = scale /100
         customtkinter.set_window_scaling(scale)
         customtkinter.set_widget_scaling(scale)
-        # self.table.column_stretch = 1.25
-        # self.table.row_stretch = 1.25
 
     def change_ip_button_action(self):
         dialog = customtkinter.CTkInputDialog(text="Type in your new Ip Adress:", title="IP change")
