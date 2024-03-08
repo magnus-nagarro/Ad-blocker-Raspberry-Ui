@@ -150,10 +150,10 @@ class HomeFrame(customtkinter.CTkFrame):
     # Search for a link:
     def search(self,value_to_find):
         for i, row in enumerate(self.table.get_children()):
-            row_value = self.table.item(row)["values"][1]  # Ändern Sie den Index basierend auf der Spalte, in der Sie suchen möchten
+            row_value = self.table.item(row)["values"][1] 
             if row_value == value_to_find:
                 self.table.selection_set(row)
-                self.table.yview(i)  # Scrollen Sie zur Zeile
+                self.table.yview(i)
 
     # "Search" Button Action:
     def search_button_action(self):
@@ -331,12 +331,12 @@ class UserInterface(customtkinter.CTkToplevel):
         self.button_settings = customtkinter.CTkButton(self.menu, width=140, text="Settings", command = self.settings_button_action,  image=images.settings_image)
         self.button_settings.place(x=5,y=565)
         
-    #start function for starting the Ui
+    # start function for starting the Ui
     def start(self):
         self.update_resources()
         self.main_frame.getlinks()
 
-    #stop function called when closing window:
+    # stop function called when closing window:
     def exit(self):
         sys.exit()
 
