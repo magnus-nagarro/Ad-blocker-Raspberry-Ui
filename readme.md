@@ -12,10 +12,10 @@ Please be sure to configure the Ad-blocker first!
 
 ### 1. Clone Repository ###
 
-Please clone this repository to a folder of your choic.
+Please clone this repository to a folder of your choice.
 
 ```cmd
-cd path/to/your/floder
+cd path/to/your/folder
 git clone https://github.com/magnus-nagarro/Ad-blocker-Raspberry-Ui.git
 ```
 
@@ -24,7 +24,7 @@ git clone https://github.com/magnus-nagarro/Ad-blocker-Raspberry-Ui.git
 To ensure smooth operation, the following packages must be installed manually if they have not already been installed.
 
 ```cmd
-cd path/to/your/floder/Ad-blocker-Raspberry-Ui
+cd path/to/your/folder/Ad-blocker-Raspberry-Ui
 pip install customtkinter
 pip install Pillow 
 pip install requests
@@ -53,7 +53,7 @@ If this is not the case, you will see an error message, please check whether the
 
 Now, when the user interface is started, you can see several frames. 
 
-On the left side you can see the MenueBar. It is static and contains informations about the Windwos Device resources and includes buttons to start/stop the blocker. At the bottom of the MenueBar you can see the navigation of the UI. You can also change the default Themecolor here.
+On the left side you can see the MenueBar. It is static and contains informations about the Windows Device resources and includes buttons to start/stop the blocker. At the bottom of the MenueBar you can see the navigation of the UI. You can also change the default Themecolor here.
 
 At the bottom of the UI, you can the StatusBar. It shows you the current status of the Blockersoftware.
 
@@ -63,7 +63,7 @@ On the right side there's the MainFrame, including Import/Export of links and a 
 
 You can export the links here too. A text file with all links will be created and opend so you can device where you want to save it.
 
-There's currently no fuction to import links via textfiles!
+There's currently no function to import links via text files!
 
 On the TableFrame you can search current blocked links. Also there's the opportunity tho delete some of these links. To delete links, select the row and press the delete button. The link is now deleted from the database.
 
@@ -82,4 +82,4 @@ Here you can get some informations of our project.
 
 ## Start Blocker ##
 
-Now that you know how the Ui is structured, you can start using the blocker. Please press the Start button. The StatusBar should be green now. Else it's red and shows an error message of the error, which occured while the starting process.
+Now that you know how the Ui is structured, you can start using the blocker. Please press the Start button. The StatusBar should be green now. Else it's red and shows an error message of the error, which occurred while the starting process.
